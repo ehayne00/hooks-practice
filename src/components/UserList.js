@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
-  const [name, setName] = useState("");
+  const [user, setUser] = useState("");
 
-  const addUser = (user) => setUsers((users) => [...users, user]);
+  const addUser = user => setUsers(users => [user, ...users])
 
-  const handleChange = (e) => setName(e.target.value)
+  const handleChange = e => setUser(e.target.value)
 
-  const handleInput = (e) => {
-      e.preventDefault()
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    //post request would go here .then
     addUser({
-      user: {name: e.target.value}
-    });
-  };
+      name: user
+    })
+  }
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
@@ -23,10 +24,12 @@ const UserList = () => {
 
   return (
     <ul>
-      <form onSubmit={handleInput}>
-        <input onChange={handleChange} value={name} name="name"></input>
+
+      <form onSubmit={handleSubmit}>
+        <input onChange={handleChange} value={user} name="name"></input>
         <button type="submit">Submit</button>
-        </form >
+      </form >
+
       {users.map((user) => (
         <p>{user.name}</p>
       ))}
